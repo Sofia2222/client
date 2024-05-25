@@ -5,8 +5,20 @@ import {TbFilterPlus} from "react-icons/tb";
 import {LuPlusSquare, LuSearch} from "react-icons/lu";
 import {MdArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
 import {RiArrowDropDownLine} from "react-icons/ri";
+import {useEffect, useState} from "react";
+import OrderService from "../../http/services/OrderService.js";
 
 const Orders = () => {
+    const [orders, setOrders] = useState(null);
+
+    useEffect(() => {
+        async function fetchData() {
+            const orders = await OrderService.getOrders();
+            setOrders(orders.data)
+        }
+        fetchData()
+    }, []);
+
     return (
         <div className={styles.mainContainer}>
             <SaidBar/>
@@ -24,7 +36,7 @@ const Orders = () => {
                     <div className={styles.headerOrders}>
                         <div className={styles.select}>
                             <span>із обраним:</span>
-                            <span>Оберіть дію</span>
+                            <span onClick={() => console.log(orders)}>Оберіть дію</span>
                         </div>
                         <div className={styles.pagination}>
                             <MdOutlineArrowBackIos />

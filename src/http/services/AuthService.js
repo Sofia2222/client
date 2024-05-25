@@ -1,4 +1,4 @@
-import api from "../http/index.js";
+import api from "../index.js";
 
 export default class AuthService {
     static async signIn(email, password, domain) {
