@@ -1,10 +1,10 @@
 import React, {createContext} from 'react'
 import ReactDOM from 'react-dom/client'
-import Store from './store/store'
+import AuthStore from './store/authStore.js'
 import './index.css'
 import Router from "./components/Router.jsx";
 
-const store = new Store();
+const store = new AuthStore();
 
 export const Context = createContext({
     store,

@@ -6,18 +6,13 @@ import {LuPlusSquare, LuSearch} from "react-icons/lu";
 import {MdArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
 import {RiArrowDropDownLine} from "react-icons/ri";
 import {useEffect, useState} from "react";
-import OrderService from "../../http/services/OrderService.js";
 
-const Orders = () => {
-    const [orders, setOrders] = useState(null);
+import {observer} from "mobx-react-lite";
 
-    useEffect(() => {
-        async function fetchData() {
-            const orders = await OrderService.getOrders();
-            setOrders(orders.data)
-        }
-        fetchData()
-    }, []);
+const Orders = observer(() => {
+    // const [orders, setOrders] = useState(null);
+    // const [perPage, setPerPage] = useState(10);
+    // const [countOrders, setCountOrders] = useState(0);
 
     return (
         <div className={styles.mainContainer}>
@@ -62,6 +57,6 @@ const Orders = () => {
             </div>
         </div>
     );
-};
+});
 
 export default Orders;
