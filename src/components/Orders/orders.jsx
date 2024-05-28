@@ -6,13 +6,19 @@ import {LuPlusSquare, LuSearch} from "react-icons/lu";
 import {MdArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
 import {RiArrowDropDownLine} from "react-icons/ri";
 import {useEffect, useState} from "react";
-
+import orderStore from '../../store/orderStore.js'
 import {observer} from "mobx-react-lite";
 
 const Orders = observer(() => {
+    const { orders, fetchOrders } = orderStore
     // const [orders, setOrders] = useState(null);
     // const [perPage, setPerPage] = useState(10);
     // const [countOrders, setCountOrders] = useState(0);
+
+    useEffect(() => {
+        fetchOrders({limit: 2, offset: 0})
+        console.log(orders)
+    }, [])
 
     return (
         <div className={styles.mainContainer}>
@@ -27,7 +33,7 @@ const Orders = observer(() => {
                     </div>
                     <div className={styles.addOrder}><LuPlusSquare/></div>
                 </div>
-                <div className={styles.orders}>
+                <div className={styles.ordersBar}>
                     <div className={styles.headerOrders}>
                         <div className={styles.select}>
                             <span>із обраним:</span>
@@ -53,6 +59,13 @@ const Orders = observer(() => {
                             <span>Показано 21 - 80 з 88 результату</span>
                         </div>
                     </div>
+                    {/*<div className={styles.orders}>*/}
+                    {/*    {orders.map(order => (*/}
+                    {/*        <div key={order.id}>*/}
+                    {/*            <span>Titile: {order.title}</span>*/}
+                    {/*        </div>*/}
+                    {/*    ))}*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </div>
