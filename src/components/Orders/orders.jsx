@@ -8,14 +8,10 @@ import {RiArrowDropDownLine} from "react-icons/ri";
 import {useEffect, useState} from "react";
 import orderStore from '../../store/orderStore.js'
 import {observer} from "mobx-react-lite";
+import dayjs from "dayjs";
 
 const Orders = observer(() => {
     const { orders, fetchOrders, isLoading } = orderStore
-    // const [orders, setOrders] = useState(null);
-    // const [perPage, setPerPage] = useState(10);
-    // const [countOrders, setCountOrders] = useState(0);
-
-
 
     useEffect(() => {
         fetchOrders({limit: 10, offset: 0})
@@ -96,7 +92,7 @@ const Orders = observer(() => {
                                                 {item.id}
                                             </td>
                                             <td>
-                                                {item.createdAt}
+                                                {dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                                             </td>
                                             <td>
                                                 {item.pib}
