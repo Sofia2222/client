@@ -10,15 +10,24 @@ import orderStore from '../../store/orderStore.js'
 import {observer} from "mobx-react-lite";
 
 const Orders = observer(() => {
-    const { orders, fetchOrders } = orderStore
+    const { orders, fetchOrders, isLoading } = orderStore
     // const [orders, setOrders] = useState(null);
     // const [perPage, setPerPage] = useState(10);
     // const [countOrders, setCountOrders] = useState(0);
 
+
+
     useEffect(() => {
-        fetchOrders({limit: 2, offset: 0})
-        console.log(orders)
+        fetchOrders({limit: 10, offset: 0})
     }, [])
+
+    if(isLoading === true) {
+        return (
+            <div>
+                Loading
+            </div>
+        )
+    }
 
     return (
         <div className={styles.mainContainer}>
@@ -59,13 +68,72 @@ const Orders = observer(() => {
                             <span>Показано 21 - 80 з 88 результату</span>
                         </div>
                     </div>
-                    {/*<div className={styles.orders}>*/}
-                    {/*    {orders.map(order => (*/}
-                    {/*        <div key={order.id}>*/}
-                    {/*            <span>Titile: {order.title}</span>*/}
-                    {/*        </div>*/}
-                    {/*    ))}*/}
-                    {/*</div>*/}
+                    <div className={styles.orders}>
+                        <div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><input type="checkbox"/></th>
+                                        <th>Номер заявки</th>
+                                        <th>Дата створення</th>
+                                        <th>ПІБ</th>
+                                        <th>Товари</th>
+                                        <th>Статус</th>
+                                        <th>Сума</th>
+                                        <th>Оплачено</th>
+                                        <th>Доставка</th>
+                                        <th>Дія</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {orders.map((item) => {
+                                    return (
+                                        <tr key={item.id}>
+                                            <td>
+                                                <input type="checkbox"/>
+                                            </td>
+                                            <td>
+                                                {item.id}
+                                            </td>
+                                            <td>
+                                                {item.createdAt}
+                                            </td>
+                                            <td>
+                                                {item.pib}
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    {item.products.map((product, i) => {
+                                                        return (
+                                                            <span key={i}>
+                                                                {product.title}
+                                                            </span>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {item.status.name}
+                                            </td>
+                                            <td>
+                                                {item.suma}
+                                            </td>
+                                            <td>
+                                                {item.paymentSuma}
+                                            </td>
+                                            <td>
+                                                {item.delivery}
+                                            </td>
+                                            <td>
+                                                <button>Дія</button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

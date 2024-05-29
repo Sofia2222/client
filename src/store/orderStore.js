@@ -1,20 +1,30 @@
 import OrderService from "../http/services/OrderService.js";
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 
 
 class OrderStore {
 
-    orders = {};
+    orders = [];
+    isLoading = false;
 
     constructor() {
-        makeAutoObservable(this)
+        makeAutoObservable(this, {}, {deep: true})
     }
 
-    fetchOrders({limit, offset}){
-        OrderService.getOrders({limit, offset}).then((res) => {
-            this.orders = res.data.orders.data
-        });
+    fetchOrders = async ({limit, offset}) => {
+        try {
+            this.isLoading = true;
+            const res = (await OrderService.getOrders({limit, offset})).data.orders.data;
+            runInAction(() => {
+                this.orders = res;
+                this.isLoading = false;
+            })
+
+        }catch (e) {
+            this.isLoading = false;
+        }
     }
+
 
 }
 
