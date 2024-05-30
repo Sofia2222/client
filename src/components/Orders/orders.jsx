@@ -2,11 +2,13 @@ import SaidBar from "../SideBar/saidBar.jsx";
 import styles from './orders.module.scss'
 import HeaderBar from "../HeaderBar/headerBar.jsx";
 import {TbFilterPlus} from "react-icons/tb";
-import {LuPlusSquare, LuSearch} from "react-icons/lu";
+import {LuMenu, LuPlusSquare, LuSearch} from "react-icons/lu";
 import {MdArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
 import {RiArrowDropDownLine} from "react-icons/ri";
 import {useEffect, useState} from "react";
 import orderStore from '../../store/orderStore.js'
+import tableHead from "./tableValue.js";
+
 import {observer} from "mobx-react-lite";
 import dayjs from "dayjs";
 
@@ -57,77 +59,69 @@ const Orders = observer(() => {
                             <MdArrowForwardIos />
                         </div>
                         <div className={styles.pageInformation}>
-                            <div className={styles.perPage}>
-                                <span>Елементів на сторінці</span>
-                                <div> 10 <RiArrowDropDownLine /></div>
-                            </div>
                             <span>Показано 21 - 80 з 88 результату</span>
                         </div>
                     </div>
                     <div className={styles.orders}>
-                        <div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th><input type="checkbox"/></th>
-                                        <th>Номер заявки</th>
-                                        <th>Дата створення</th>
-                                        <th>ПІБ</th>
-                                        <th>Товари</th>
-                                        <th>Статус</th>
-                                        <th>Сума</th>
-                                        <th>Оплачено</th>
-                                        <th>Доставка</th>
-                                        <th>Дія</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {orders.map((item) => {
-                                    return (
-                                        <tr key={item.id}>
-                                            <td>
-                                                <input type="checkbox"/>
-                                            </td>
-                                            <td>
-                                                {item.id}
-                                            </td>
-                                            <td>
-                                                {dayjs(item.createdAt).format('YYYY-MM-DD HH:mm:ss')}
-                                            </td>
-                                            <td>
-                                                {item.pib}
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    {item.products.map((product, i) => {
-                                                        return (
-                                                            <span key={i}>
-                                                                {product.title}
-                                                            </span>
-                                                        )
-                                                    })}
+                        <div className={styles.table}>
+                            <div className={styles.tableHead}>
+                                <div className={styles.hRow}>
+                                    <div className={styles.hCell}>
+                                        <input type="checkbox"/>
+                                    </div>
+                                    {tableHead.map((item, i) => {
+                                        return (
+                                            <div className={styles.hCell} key={i}>
+                                                <span>{item.title}</span>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                                <div className={styles.tableBody}>
+                                    {orders.map((order, i) => {
+                                        return (
+                                            <div className={styles.bRow} key={i}>
+                                                <div className={styles.bCell}>
+                                                    <input type="checkbox"/>
                                                 </div>
-                                            </td>
-                                            <td>
-                                                {item.status.name}
-                                            </td>
-                                            <td>
-                                                {item.suma}
-                                            </td>
-                                            <td>
-                                                {item.paymentSuma}
-                                            </td>
-                                            <td>
-                                                {item.delivery}
-                                            </td>
-                                            <td>
-                                                <button>Дія</button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                                </tbody>
-                            </table>
+                                                <div className={styles.bCell}>
+                                                    <span>{order.id}</span>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <span>{dayjs(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <span>{order.pib}</span>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <div className={styles.multiCell}>
+                                                        {order.products.map((product) => {
+                                                            return (
+                                                                <span key={product.id}>{product.title} - {product.OrderRefProduct.amount}</span>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <span style={{backgroundColor: order.status.backgroundColor, padding: '4px', borderRadius: '2px'}}>{order.status.name}</span>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <span>{order.suma}</span>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <span>0</span>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <span>{order.delivery}</span>
+                                                </div>
+                                                <div className={styles.bCell}>
+                                                    <LuMenu />
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

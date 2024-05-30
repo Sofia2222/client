@@ -6,6 +6,7 @@ class OrderStore {
 
     orders = [];
     isLoading = false;
+    pages = 0;
 
     constructor() {
         makeAutoObservable(this, {}, {deep: true})
@@ -17,6 +18,7 @@ class OrderStore {
             const res = (await OrderService.getOrders({limit, offset})).data.orders.data;
             runInAction(() => {
                 this.orders = res;
+                this.pages = orderr
                 this.isLoading = false;
             })
 

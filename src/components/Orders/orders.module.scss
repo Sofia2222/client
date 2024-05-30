@@ -7,11 +7,13 @@ $mainGray: #E7E7E7;
 
 .mainContainer{
   display: flex;
+  min-width: 1920px;
+  min-height: 1080px;
 }
 
 .mainBar{
   display: flex;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   background: $mainGray;
   flex-direction: column;
@@ -137,22 +139,72 @@ $mainGray: #E7E7E7;
       span{
         margin-bottom: 10px;
       }
-      div{
-        background-color: $mainGray;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        border-radius: 10px;
-        width: 50px;
-        height: 23px;
-        margin-left: 20px;
-        padding: 6px;
-        box-sizing: border-box;
+    }
+  }
+}
 
-        svg{
-          font-size: 20px;
-        }
+.table{
+  display: flex;
+  flex-direction: column;
+  input[type=checkbox]{
+    appearance: auto;
+    margin: 0;
+    width: 20px;
+    height: 20px;
+    &:checked{
+      accent-color: $primePurple;
+    }
+  }
+}
+
+.tableHead{
+  margin-top: 15px;
+  background-color: $mainGray;
+  font-size: 11px;
+  height: 40px;
+  border-radius: 10px;
+  .hRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    .hCell{
+      width: calc(100% / 10);
+    }
+  }
+}
+
+.tableBody{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 100%;
+  min-height: 100%;
+  margin-top: 20px;
+  .bRow{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-bottom: 30px;
+    .bCell{
+      width: calc(100% / 10);
+
+      .multiCell{
+        display: flex;
+        flex-direction: column;
+      }
+    }
+    svg{
+      color: $primePurple;
+      cursor: pointer;
+      font-size: 20px;
+      &:hover{
+        font-size: 22px;
+        padding: 0;
+        margin: 0;
       }
     }
   }
