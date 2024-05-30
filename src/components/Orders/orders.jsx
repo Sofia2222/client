@@ -8,9 +8,9 @@ import {RiArrowDropDownLine} from "react-icons/ri";
 import {useEffect, useState} from "react";
 import orderStore from '../../store/orderStore.js'
 import tableHead from "./tableValue.js";
-
 import {observer} from "mobx-react-lite";
 import dayjs from "dayjs";
+import 'reactjs-popup/dist/index.css';
 
 const Orders = observer(() => {
     const { orders, fetchOrders, isLoading } = orderStore
@@ -38,7 +38,7 @@ const Orders = observer(() => {
                         <LuSearch />
                         <input type="text" placeholder='Пошук замовлень'/>
                     </div>
-                    <div className={styles.addOrder}><LuPlusSquare/></div>
+                    <div className={styles.addOrder}><PopupAddOrder/></div>
                 </div>
                 <div className={styles.ordersBar}>
                     <div className={styles.headerOrders}>

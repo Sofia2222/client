@@ -18,7 +18,6 @@ class OrderStore {
             const res = (await OrderService.getOrders({limit, offset})).data.orders.data;
             runInAction(() => {
                 this.orders = res;
-                this.pages = orderr
                 this.isLoading = false;
             })
 
@@ -26,7 +25,6 @@ class OrderStore {
             this.isLoading = false;
         }
     }
-
 
 }
 
