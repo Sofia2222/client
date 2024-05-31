@@ -10,15 +10,18 @@ import tableHead from "./tableValue.js";
 import {observer} from "mobx-react-lite";
 import dayjs from "dayjs";
 import 'reactjs-popup/dist/index.css';
-import Modal from "../Modal/modal.jsx";
+import ModalAddOrder from "./PopupAddOrder/modalAddOrder.jsx";
 
 const Orders = observer(() => {
-    const { orders, fetchOrders, isLoading } = orderStore
+    const { orders, statuses, fetchOrders, fetchStatuses, isLoading } = orderStore
     const [activeAddModal, setActiveAddModal] = useState(false);
 
     useEffect(() => {
-        fetchOrders({limit: 10, offset: 0})
+        fetchOrders({limit: 10, offset: 0});
+        fetchStatuses();
     }, [])
+
+    console.log(statuses)
 
     if(isLoading === true) {
         return (
@@ -130,7 +133,7 @@ const Orders = observer(() => {
                     </div>
                 </div>
             </div>
-            <Modal active={activeAddModal} setActive={setActiveAddModal}/>
+            <ModalAddOrder active={activeAddModal} setActive={setActiveAddModal}/>
         </div>
     );
 });

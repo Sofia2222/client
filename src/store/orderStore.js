@@ -1,10 +1,13 @@
 import OrderService from "../http/services/OrderService.js";
+import StatusService from "../http/services/StatusService.js";
+
 import {makeAutoObservable, runInAction} from "mobx";
 
 
 class OrderStore {
 
     orders = [];
+    statuses = [];
     isLoading = false;
     pages = 0;
 
@@ -25,7 +28,15 @@ class OrderStore {
             this.isLoading = false;
         }
     }
-
+    fetchStatuses = async () => {
+        try {
+            const
+            this.statuses = (await StatusService.getStatuses()).data.statuses.data;
+            console.log(await StatusService.getStatuses())
+        }catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 export default new OrderStore();
