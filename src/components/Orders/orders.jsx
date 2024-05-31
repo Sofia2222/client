@@ -4,16 +4,17 @@ import HeaderBar from "../HeaderBar/headerBar.jsx";
 import {TbFilterPlus} from "react-icons/tb";
 import {LuMenu, LuPlusSquare, LuSearch} from "react-icons/lu";
 import {MdArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
-import {RiArrowDropDownLine} from "react-icons/ri";
 import {useEffect, useState} from "react";
 import orderStore from '../../store/orderStore.js'
 import tableHead from "./tableValue.js";
 import {observer} from "mobx-react-lite";
 import dayjs from "dayjs";
 import 'reactjs-popup/dist/index.css';
+import Modal from "../Modal/modal.jsx";
 
 const Orders = observer(() => {
     const { orders, fetchOrders, isLoading } = orderStore
+    const [activeAddModal, setActiveAddModal] = useState(false);
 
     useEffect(() => {
         fetchOrders({limit: 10, offset: 0})
@@ -38,7 +39,10 @@ const Orders = observer(() => {
                         <LuSearch />
                         <input type="text" placeholder='Пошук замовлень'/>
                     </div>
-                    <div className={styles.addOrder}><PopupAddOrder/></div>
+
+                    <div className={styles.addOrder}>
+                        <LuPlusSquare onClick={() => setActiveAddModal(true)}/>
+                    </div>
                 </div>
                 <div className={styles.ordersBar}>
                     <div className={styles.headerOrders}>
@@ -126,6 +130,7 @@ const Orders = observer(() => {
                     </div>
                 </div>
             </div>
+            <Modal active={activeAddModal} setActive={setActiveAddModal}/>
         </div>
     );
 });
