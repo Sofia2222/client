@@ -4,6 +4,7 @@ $rudeGrey: #3d3b3b;
 $lightGrey: #D3D3D3;
 $purpleActive: #58008CFF;
 $mainGray: #E7E7E7;
+$lightPurple: #CBC3E3;
 
 .mainContainer{
   display: flex;
@@ -208,4 +209,14 @@ $mainGray: #E7E7E7;
       }
     }
   }
+}
+
+
+.selectStatuses__control{
+  &:hover{
+    background-color: $lightPurple;
+  }
+}
+.selectStatuses__menu{
+  background-color: purple;
 }

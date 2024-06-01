@@ -11,6 +11,7 @@ import {observer} from "mobx-react-lite";
 import dayjs from "dayjs";
 import 'reactjs-popup/dist/index.css';
 import ModalAddOrder from "./PopupAddOrder/modalAddOrder.jsx";
+import Select, {defaultTheme} from 'react-select'
 
 const Orders = observer(() => {
     const { orders, statuses, fetchOrders, fetchStatuses, isLoading } = orderStore
@@ -21,7 +22,6 @@ const Orders = observer(() => {
         fetchStatuses();
     }, [])
 
-    console.log(statuses)
 
     if(isLoading === true) {
         return (
@@ -30,7 +30,10 @@ const Orders = observer(() => {
             </div>
         )
     }
-
+    const optionStatuses = statuses.map((status) => {
+        return {value: status.id, label: status.name};
+    })
+    console.log(optionStatuses)
     return (
         <div className={styles.mainContainer}>
             <SaidBar/>
@@ -110,7 +113,16 @@ const Orders = observer(() => {
                                                     </div>
                                                 </div>
                                                 <div className={styles.bCell}>
-                                                    <span style={{backgroundColor: order.status.backgroundColor, padding: '4px', borderRadius: '2px'}}>{order.status.name}</span>
+                                                    {console.log((statuses.filter((status) => status.id == order.status.id))[0].name)}
+                                                    <Select classNamePrefix={'selectStatuses'} options={optionStatuses}
+                                                            defaultInputValue={(statuses.filter((status) => status.id == order.status.id))[0].name}
+                                                            styles={{
+                                                                control: (baseStyles, state) => ({
+                                                                    ...baseStyles,
+                                                                    backgroundColor: state.isFocused ? 'white' : order.status.backgroundColor,
+                                                                }),
+
+                                                    }}/>
                                                 </div>
                                                 <div className={styles.bCell}>
                                                     <span>{order.suma}</span>
