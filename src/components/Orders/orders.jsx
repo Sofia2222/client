@@ -11,29 +11,37 @@ import {observer} from "mobx-react-lite";
 import dayjs from "dayjs";
 import 'reactjs-popup/dist/index.css';
 import ModalAddOrder from "./PopupAddOrder/modalAddOrder.jsx";
-import Select, {defaultTheme} from 'react-select'
+import Select from 'react-select'
+import Preloader from "../Preloader/preloader.jsx";
+import createArrayFromNumber from "../../utils/createArrayFromNumber.js";
 
 const Orders = observer(() => {
-    const { orders, statuses, fetchOrders, fetchStatuses, isLoading } = orderStore
+    const perPage = 14;
+    const { orders, statuses, totalOrders, fetchOrders, fetchStatuses, updateOrderStatus, isLoading } = orderStore;
     const [activeAddModal, setActiveAddModal] = useState(false);
-
+    const countPages = Math.ceil(totalOrders/perPage);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pages = createArrayFromNumber(countPages)
+    console.log(currentPage)
     useEffect(() => {
-        fetchOrders({limit: 10, offset: 0});
+        fetchOrders({limit: perPage, offset: currentPage === 1 ? 0 : perPage*(currentPage - 1)});
         fetchStatuses();
-    }, [])
+    }, [currentPage])
 
 
     if(isLoading === true) {
         return (
-            <div>
-                Loading
-            </div>
+            <Preloader/>
         )
     }
     const optionStatuses = statuses.map((status) => {
-        return {value: status.id, label: status.name};
+        return {value: status.id, label: status.name, backgroundColor: status.backgroundColor};
     })
-    console.log(optionStatuses)
+    const onChangeStatus = async (newStatus, orderId) =>{
+        console.log(newStatus)
+        await updateOrderStatus({orderId, statusId: newStatus.value})
+    }
+
     return (
         <div className={styles.mainContainer}>
             <SaidBar/>
@@ -57,19 +65,24 @@ const Orders = observer(() => {
                             <span onClick={() => console.log(orders)}>Оберіть дію</span>
                         </div>
                         <div className={styles.pagination}>
-                            <MdOutlineArrowBackIos />
-                            <div className={styles.numberPagination}>
-                                <span>1</span>
-                                <span>2</span>
-                                <span>3</span>
-                                <span>4</span>
-                                <span>5</span>
-                                <span>6</span>
+                            <MdOutlineArrowBackIos onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}/>
+                            <div className={styles.numbersPagination}>
+                                {pages.map((page) => (
+                                    <span onClick={() => setCurrentPage(page)} className={page === currentPage ? styles.pagNumberActive : ''} key={page}>
+                                        {page}
+                                    </span>
+                                ))}
                             </div>
-                            <MdArrowForwardIos />
+                            <MdArrowForwardIos onClick={() => setCurrentPage(currentPage >= countPages ? currentPage: currentPage+1)}/>
                         </div>
                         <div className={styles.pageInformation}>
-                            <span>Показано 21 - 80 з 88 результату</span>
+                            <span>
+                                {
+                                    `Показано ${currentPage === 1 ? 1 : perPage*(currentPage - 1)} 
+                                    - ${currentPage ===countPages ? totalOrders : perPage*currentPage}
+                                     з ${totalOrders} результату`
+                                }
+                            </span>
                         </div>
                     </div>
                     <div className={styles.orders}>
@@ -87,59 +100,59 @@ const Orders = observer(() => {
                                         )
                                     })}
                                 </div>
-                                <div className={styles.tableBody}>
-                                    {orders.map((order, i) => {
-                                        return (
-                                            <div className={styles.bRow} key={i}>
-                                                <div className={styles.bCell}>
-                                                    <input type="checkbox"/>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <span>{order.id}</span>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <span>{dayjs(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <span>{order.pib}</span>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <div className={styles.multiCell}>
-                                                        {order.products.map((product) => {
-                                                            return (
-                                                                <span key={product.id}>{product.title} - {product.OrderRefProduct.amount}</span>
-                                                            )
-                                                        })}
-                                                    </div>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    {console.log((statuses.filter((status) => status.id == order.status.id))[0].name)}
-                                                    <Select classNamePrefix={'selectStatuses'} options={optionStatuses}
-                                                            defaultInputValue={(statuses.filter((status) => status.id == order.status.id))[0].name}
-                                                            styles={{
-                                                                control: (baseStyles, state) => ({
-                                                                    ...baseStyles,
-                                                                    backgroundColor: state.isFocused ? 'white' : order.status.backgroundColor,
-                                                                }),
-
-                                                    }}/>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <span>{order.suma}</span>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <span>0</span>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <span>{order.delivery}</span>
-                                                </div>
-                                                <div className={styles.bCell}>
-                                                    <LuMenu />
+                            </div>
+                            <div className={styles.tableBody}>
+                                {orders.map((order, i) => {
+                                    return (
+                                        <div className={styles.bRow} key={i}>
+                                            <div className={styles.bCell}>
+                                                <input type="checkbox"/>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <span>{order.id}</span>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <span>{dayjs(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}</span>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <span>{order.pib}</span>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <div className={styles.multiCell}>
+                                                    {order.products.map((product) => {
+                                                        return (
+                                                            <span
+                                                                key={product.id}>{product.title} - {product.OrderRefProduct.amount}</span>
+                                                        )
+                                                    })}
                                                 </div>
                                             </div>
-                                        )
-                                    })}
-                                </div>
+                                            <div className={styles.bCell}>
+                                                <Select classNamePrefix={'selectStatuses'} options={optionStatuses}
+                                                        defaultValue={optionStatuses.filter(status => status.value === order.status.id)[0]}
+                                                        onChange={(newStatus) => onChangeStatus(newStatus, order.id)}
+                                                        styles={{
+                                                            control: (baseStyles, state) => ({
+                                                                ...baseStyles,
+                                                                backgroundColor: state.getValue()[0].backgroundColor,
+                                                            }),
+                                                        }}/>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <span>{order.suma}</span>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <span>0</span>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <span>{order.delivery}</span>
+                                            </div>
+                                            <div className={styles.bCell}>
+                                                <LuMenu/>
+                                            </div>
+                                        </div>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>

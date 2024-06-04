@@ -1,8 +1,6 @@
 import OrderService from "../http/services/OrderService.js";
 import StatusService from "../http/services/StatusService.js";
-
 import {makeAutoObservable, runInAction} from "mobx";
-import StatuseService from "../http/services/StatusService.js";
 
 
 class OrderStore {
@@ -10,7 +8,7 @@ class OrderStore {
     orders = [];
     statuses = [];
     isLoading = false;
-    pages = 0;
+    totalOrders = 0;
 
     constructor() {
         makeAutoObservable(this, {}, {deep: true})
@@ -19,9 +17,11 @@ class OrderStore {
     fetchOrders = async ({limit, offset}) => {
         try {
             this.isLoading = true;
-            const res = (await OrderService.getOrders({limit, offset})).data.orders.data;
+            const res = (await OrderService.getOrders({limit, offset})).data.orders;
+            console.log(res)
             runInAction(() => {
-                this.orders = res;
+                this.totalOrders = res.meta.allCount;
+                this.orders = res.data;
                 this.isLoading = false;
             })
 
@@ -29,12 +29,18 @@ class OrderStore {
             this.isLoading = false;
         }
     }
+
     fetchStatuses = async () => {
         try {
             this.statuses = (await StatusService.getStatuses()).data.statuses;
         }catch (e) {
             console.log(e)
         }
+    }
+
+    updateOrderStatus = async ({orderId, statusId}) => {
+        const res = await OrderService.update({orderId, statusId});
+        console.log(res)
     }
 }
 

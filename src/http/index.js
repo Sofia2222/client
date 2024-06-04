@@ -10,6 +10,7 @@ const api = axios.create({
 });
 api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+    config.headers.subdomain = localStorage.getItem("subdomain");
     return config;
 });
 
@@ -17,10 +18,12 @@ api.interceptors.response.use((config) => {
     return config;
 }, async (error) => {
     const originalRequest = error.config;
+    console.log('interceptor')
     if (error.response.status == 401) {
         originalRequest._isRetry = true;
         try {
-            const res = await axios.get(API_URL + 'auth/refresh', {withCredentials: true});
+            const subdomain = localStorage.getItem("subdomain");
+            const res = await axios.get(API_URL + 'auth/refresh', {withCredentials: true, headers: {subdomain}});
             console.log(res.data)
             localStorage.getItem('token', res.data.accessToken);
             return res.request(originalRequest);

@@ -1,4 +1,4 @@
-import React, {createContext} from 'react'
+import {createContext} from 'react'
 import ReactDOM from 'react-dom/client'
 import AuthStore from './store/authStore.js'
 import './index.css'
@@ -11,9 +11,7 @@ export const Context = createContext({
 });
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-      <Context.Provider value={{store}}>
-          <Router/>
-      </Context.Provider>
-  </React.StrictMode>,
+    <Context.Provider value={{store}}>
+        <Router/>
+    </Context.Provider>
 )
