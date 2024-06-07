@@ -1,9 +1,7 @@
 import SaidBar from "../SideBar/saidBar.jsx";
 import styles from './orders.module.scss'
 import HeaderBar from "../HeaderBar/headerBar.jsx";
-import {TbFilterPlus} from "react-icons/tb";
-import {LuMenu, LuPlusSquare, LuSearch} from "react-icons/lu";
-import {MdArrowForwardIos, MdOutlineArrowBackIos} from "react-icons/md";
+import {LuMenu} from "react-icons/lu";
 import {useEffect, useState} from "react";
 import orderStore from '../../store/orderStore.js'
 import tableHead from "./tableValue.js";
@@ -14,9 +12,12 @@ import ModalAddOrder from "./PopupAddOrder/modalAddOrder.jsx";
 import Select from 'react-select'
 import Preloader from "../Preloader/preloader.jsx";
 import createArrayFromNumber from "../../utils/createArrayFromNumber.js";
+import FilterAndAddSection from "../UI/FilterAndAddSection/filterAndAddSection.jsx";
+import TableHeader from "../UI/TableHeader/tableHeader.jsx";
+import {Link} from "react-router-dom";
 
 const Orders = observer(() => {
-    const perPage = 14;
+    const [perPage, setPerPage] = useState(15);
     const { orders, statuses, totalOrders, fetchOrders, fetchStatuses, updateOrderStatus, isLoading } = orderStore;
     const [activeAddModal, setActiveAddModal] = useState(false);
     const countPages = Math.ceil(totalOrders/perPage);
@@ -24,9 +25,9 @@ const Orders = observer(() => {
     const pages = createArrayFromNumber(countPages)
     console.log(currentPage)
     useEffect(() => {
-        fetchOrders({limit: perPage, offset: currentPage === 1 ? 0 : perPage*(currentPage - 1)});
+        fetchOrders({limit: perPage, offset: currentPage === 1 ? 0 : perPage * (currentPage - 1)})
         fetchStatuses();
-    }, [currentPage])
+    }, [currentPage, perPage])
 
 
     if(isLoading === true) {
@@ -45,46 +46,12 @@ const Orders = observer(() => {
     return (
         <div className={styles.mainContainer}>
             <SaidBar/>
+            <div className={styles.sidebarLayout}></div>
             <div className={styles.mainBar}>
                 <HeaderBar title='Замовлення' aboutPage='Детальна інформація про замовлення.'/>
-                <div className={styles.filterSection}>
-                    <div className={styles.filter}><TbFilterPlus/></div>
-                    <div className={styles.searchOrders}>
-                        <LuSearch />
-                        <input type="text" placeholder='Пошук замовлень'/>
-                    </div>
-
-                    <div className={styles.addOrder}>
-                        <LuPlusSquare onClick={() => setActiveAddModal(true)}/>
-                    </div>
-                </div>
+                <FilterAndAddSection setActiveModal={setActiveAddModal}/>
                 <div className={styles.ordersBar}>
-                    <div className={styles.headerOrders}>
-                        <div className={styles.select}>
-                            <span>із обраним:</span>
-                            <span onClick={() => console.log(orders)}>Оберіть дію</span>
-                        </div>
-                        <div className={styles.pagination}>
-                            <MdOutlineArrowBackIos onClick={() => setCurrentPage(currentPage > 1 ? currentPage - 1 : 1)}/>
-                            <div className={styles.numbersPagination}>
-                                {pages.map((page) => (
-                                    <span onClick={() => setCurrentPage(page)} className={page === currentPage ? styles.pagNumberActive : ''} key={page}>
-                                        {page}
-                                    </span>
-                                ))}
-                            </div>
-                            <MdArrowForwardIos onClick={() => setCurrentPage(currentPage >= countPages ? currentPage: currentPage+1)}/>
-                        </div>
-                        <div className={styles.pageInformation}>
-                            <span>
-                                {
-                                    `Показано ${currentPage === 1 ? 1 : perPage*(currentPage - 1)} 
-                                    - ${currentPage ===countPages ? totalOrders : perPage*currentPage}
-                                     з ${totalOrders} результату`
-                                }
-                            </span>
-                        </div>
-                    </div>
+                    <TableHeader countPages={countPages} currentPage={currentPage} pages={pages} perPage={perPage} setCurrentPage={setCurrentPage} totalPages={totalOrders} setPerPage={setPerPage}/>
                     <div className={styles.orders}>
                         <div className={styles.table}>
                             <div className={styles.tableHead}>
@@ -142,13 +109,13 @@ const Orders = observer(() => {
                                                 <span>{order.suma}</span>
                                             </div>
                                             <div className={styles.bCell}>
-                                                <span>0</span>
+                                                <span>{order.amountPayments || 0}</span>
                                             </div>
                                             <div className={styles.bCell}>
                                                 <span>{order.delivery}</span>
                                             </div>
                                             <div className={styles.bCell}>
-                                                <LuMenu/>
+                                                <Link to={`/order/${order.id}`}><LuMenu /></Link>
                                             </div>
                                         </div>
                                     )

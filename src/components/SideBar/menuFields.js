@@ -1,13 +1,8 @@
-import {LuBarChart3, LuBoxes, LuContact, LuLayoutDashboard, LuShoppingBasket, LuWallet} from "react-icons/lu";
+import {LuBarChart3, LuBoxes, LuContact, LuShoppingBasket, LuWallet} from "react-icons/lu";
 const pages = [
     {
-        title: 'Головна сторінка',
-        link: '/dashboard',
-        icon: LuLayoutDashboard
-    },
-    {
         title: 'Замовлення',
-        link: '/orders',
+        link: '/',
         icon: LuShoppingBasket
     },
     {
@@ -16,8 +11,8 @@ const pages = [
         icon: LuContact
     },
     {
-        title: 'Склад',
-        link: '/storages',
+        title: 'Товари',
+        link: '/products',
         icon: LuBoxes
     },
     {

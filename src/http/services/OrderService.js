@@ -15,4 +15,7 @@ export default class OrderService {
                 }
             });
     }
+    static async getOrderById({id}) {
+        return await api.get(`${pathRequest}/${id}`);
+    }
 }

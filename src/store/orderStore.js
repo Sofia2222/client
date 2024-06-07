@@ -18,7 +18,6 @@ class OrderStore {
         try {
             this.isLoading = true;
             const res = (await OrderService.getOrders({limit, offset})).data.orders;
-            console.log(res)
             runInAction(() => {
                 this.totalOrders = res.meta.allCount;
                 this.orders = res.data;
@@ -29,7 +28,6 @@ class OrderStore {
             this.isLoading = false;
         }
     }
-
     fetchStatuses = async () => {
         try {
             this.statuses = (await StatusService.getStatuses()).data.statuses;
@@ -39,8 +37,11 @@ class OrderStore {
     }
 
     updateOrderStatus = async ({orderId, statusId}) => {
-        const res = await OrderService.update({orderId, statusId});
-        console.log(res)
+        try{
+            await OrderService.update({orderId, statusId});
+        }catch (e) {
+            console.log(e)
+        }
     }
 }
 

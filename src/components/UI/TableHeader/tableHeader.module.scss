@@ -1,0 +1,67 @@
+$primePurple: #6706A5;
+$primeGrey: #a19f9f;
+$rudeGrey: #3d3b3b;
+$lightGrey: #D3D3D3;
+$purpleActive: #58008CFF;
+$mainGray: #E7E7E7;
+$lightPurple: #CBC3E3;
+
+.headerOrders{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .select{
+    span{
+      &:first-child{
+        text-transform: uppercase;
+      }
+      &:last-child{
+        background-color: $mainGray;
+        padding: 5px;
+        margin-left: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .pagination{
+    display: flex;
+    flex-direction: row;
+    .numbersPagination{
+      .pagNumberActive{
+        color: $primePurple;
+      }
+      span{
+        font-size: 20px;
+        font-weight: bolder;
+        margin-right: 10px;
+        cursor: pointer;
+        &:first-child{
+          margin-left: 15px;
+        }
+        &:last-child{
+          margin-right: 15px;
+        }
+      }
+    }
+    svg{
+      font-size: 24px;
+      cursor: pointer;
+    }
+  }
+
+  .pageInformation{
+    .perPage{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 10px;
+      span{
+        margin-right: 10px;
+      }
+    }
+  }
+}

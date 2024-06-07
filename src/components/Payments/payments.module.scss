@@ -27,7 +27,7 @@ $lightPurple: #CBC3E3;
 }
 
 
-.ordersBar{
+.paymentsBar{
   width: 94%;
   height: 100%;
   background-color: white;
@@ -71,7 +71,7 @@ $lightPurple: #CBC3E3;
     width: 100%;
     height: 100%;
     .hCell{
-      width: calc(100% / 10);
+      width: calc(100% / 7);
     }
   }
 }
@@ -89,7 +89,7 @@ $lightPurple: #CBC3E3;
     justify-content: space-around;
     padding-bottom: 28px;
     .bCell{
-      width: calc(100% / 10);
+      width: calc(100% / 7);
       font-size: 13px;
       overflow-wrap: break-word;
       white-space: normal;
@@ -102,12 +102,7 @@ $lightPurple: #CBC3E3;
       color: $primePurple;
       cursor: pointer;
       font-size: 20px;
-      &:hover{
-        font-size: 22px;
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-      }
+      padding-left: 5px;
     }
   }
 }
