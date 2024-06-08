@@ -9,7 +9,7 @@ import Preloader from "./Preloader/preloader.jsx";
 import Contacts from "./Contacts/contacts.jsx";
 import Products from "./Products/products.jsx";
 import Payments from "./Payments/payments.jsx";
-import OrderById from "./OrderById/orderById.jsx";
+import Analytics from "./Analytics/analytics.jsx";
 
 const Router = observer(() => {
     const {store} = useContext(Context);
@@ -32,10 +32,7 @@ const Router = observer(() => {
                 <Route path="/contacts" element={store.isAuth ? <Contacts/> : <SignInForm/>}/>
                 <Route path="/products" element={store.isAuth ? <Products/> : <SignInForm/>}/>
                 <Route path="/payments" element={store.isAuth ? <Payments/> : <SignInForm/>}/>
-                <Route
-                    path="/order/:id"
-                    element={<OrderById/>}
-                />
+                <Route path="/analytics" element={store.isAuth ? <Analytics/> : <SignInForm/>}/>
             </Routes>
         </BrowserRouter>
     );

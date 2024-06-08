@@ -24,26 +24,6 @@ const SaidBar = () => {
                 ))}
             </div>
             <div className={styles.footer}>
-                <div className={styles.line}></div>
-                <div className={styles.footerPages}>
-                    <div className={styles.page}>
-                        <Link to={'/integrations'}>
-                            <div className={styles.linkBody}>
-                                <LuSlidersHorizontal className={styles.Icon}/>
-                                <span>Інтеграції</span>
-                            </div>
-                        </Link>
-                    </div>
-                    <div className={styles.page}>
-                        <Link to={'/settings'}>
-                            <div className={styles.linkBody}>
-                                <LuSettings className={styles.Icon}/>
-                                <span>Налаштування</span>
-                            </div>
-                        </Link>
-                    </div>
-                </div>
-                <div className={styles.line}></div>
                 <div className={styles.logout}>
                     <Link to='/'>
                         <div>
