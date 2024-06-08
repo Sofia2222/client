@@ -12,17 +12,20 @@ import dayjs from "dayjs";
 
 // import Preloader from "../Preloader/preloader.jsx";
 const Analytics = observer(() => {
-    const {counts, fetchCounts, isLoading} = analyticsStore;
+    const {counts, statusesInfo, fetchCounts, isLoading, fetchStatusesInfo, fetchOrderInfo, ordersInfo, chatBotInfo, fetchChatBotAdvise} = analyticsStore;
     const [curOption, setCurOption] = useState(
         {label: "Поточний місяць",
             value: {
-                from: new Date(new Date().setDate(new Date().getMonth()-1)),
-                to: new Date()
+                from: dayjs(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).format('YYYY-MM-DD'),
+                to: dayjs(new Date()).format('YYYY-MM-DD'),
             }
         },
     );
     useEffect(() => {
         fetchCounts();
+        fetchStatusesInfo();
+        fetchOrderInfo({from: curOption.value.from, to: curOption.value.to});
+        fetchChatBotAdvise();
     }, [curOption])
 
     if (isLoading){
@@ -30,7 +33,6 @@ const Analytics = observer(() => {
             <Preloader/>
         )
     }
-    console.log(counts)
 
     const optionDate = [
         {label: "Поточний місяць",
@@ -42,14 +44,14 @@ const Analytics = observer(() => {
         {label: "Попередній місяць",
             value: {
                     from: dayjs(new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1)).format('YYYY-MM-DD'),
-                    to: dayjs(new Date(new Date().getFullYear(), new Date().getMonth() - 2, 1)).format('YYYY-MM-DD')
+                    to: dayjs(new Date(new Date().getFullYear(), new Date().getMonth(), 1)).format('YYYY-MM-DD'),
             }
         },
         {label: "За весь час", value: {}},
     ]
 
     const onChangeOptionDate = (option) => {
-        console.log(option)
+        setCurOption(option)
     }
 
     return (
@@ -94,10 +96,19 @@ const Analytics = observer(() => {
                             <div className={styles.report}>
                                 <span>Звіт по продажам</span>
                                 <Line data={{
-                                    labels: ['lan', 'feb'],
+                                    labels: ordersInfo.map(orderInfo => orderInfo.date),
                                     datasets: [
                                         {
-                                            data: ['26', '73']
+                                            label: 'Кількість замовлень',
+                                            data: ordersInfo.map(orderInfo => orderInfo.ordersCount)
+                                        },
+                                        {
+                                            label: 'Кількість продаж',
+                                            data: ordersInfo.map(orderInfo => orderInfo.totalSold)
+                                        },
+                                        {
+                                            label: 'Сума продаж',
+                                            data: ordersInfo.map(orderInfo => orderInfo.totalSales)
                                         }
                                     ]
                                 }}/>
@@ -105,9 +116,10 @@ const Analytics = observer(() => {
                             <div className={styles.report}>
                                 <span>Звіт по продажам</span>
                                 <Bar data={{
-                                    labels: ['lan', 'feb'],
+                                    labels: ['Товари', 'Кількість продаж'],
                                     datasets: [
                                         {
+                                            label: 'Кількість',
                                             data: ['26', '73']
                                         }
                                     ]
@@ -118,20 +130,22 @@ const Analytics = observer(() => {
                             <div className={styles.reportsBot}>
                                 <div className={styles.reportBot}>
                                     <Doughnut data={{
-                                        labels: ['lan', 'feb'],
+                                        labels: statusesInfo.map((status) => status.name),
                                         datasets: [
                                             {
-                                                data: ['26', '73']
+                                                label: 'Статус',
+                                                data: statusesInfo.map((status) => status.count),
+                                                backgroundColor: statusesInfo.map((status) => status.backgroundColor),
                                             }
                                         ]
                                     }}/>
                                 </div>
                                 <div className={styles.reportBot}>
                                     <Doughnut data={{
-                                        labels: ['lan', 'feb'],
+                                        labels: ['Заявки', 'Видалені'],
                                         datasets: [
                                             {
-                                                data: ['26', '73']
+                                                data: ['130', '20']
                                             }
                                         ]
                                     }}/>
@@ -139,6 +153,7 @@ const Analytics = observer(() => {
                             </div>
                             <div className={styles.chatBot}>
                                 <span>Чат порад від боту!</span>
+                                <div dangerouslySetInnerHTML={{ __html: chatBotInfo }} />
                             </div>
                         </div>
                     </div>
